@@ -5,7 +5,7 @@ import random
 
 def fetch_data():
     L = instaloader.Instaloader()
-    # Danh sách các idol bạn muốn theo dõi
+    # Danh sách
     idols = [
         {"name": "Karina", "username": "katarinabluu"},
         {"name": "Winter", "username": "imwinter"}
@@ -14,17 +14,15 @@ def fetch_data():
     final_data = {"profiles": []}
 
     for idol in idols:
-        print(f"Đang lấy dữ liệu của {idol['name']}...")
+        print(f"--- Đang quét: {idol['name']} ---")
         try:
             profile = instaloader.Profile.from_username(L.context, idol['username'])
             posts_data = []
-            
             for count, post in enumerate(profile.get_posts()):
                 if count >= 3: break 
                 posts_data.append({
                     "url": f"https://www.instagram.com/p/{post.shortcode}/",
-                    "shortcode": post.shortcode,
-                    "timestamp": post.date_utc.isoformat()
+                    "shortcode": post.shortcode
                 })
             
             final_data["profiles"].append({
@@ -32,12 +30,11 @@ def fetch_data():
                 "username": idol['username'],
                 "posts": posts_data
             })
-            
-            # Nghỉ ngơi một chút để tránh bị Instagram chặn (rất quan trọng khi quét nhiều người)
-            time.sleep(random.uniform(5, 10))
+            print(f"Thành công lấy {len(posts_data)} bài của {idol['name']}")
+            time.sleep(random.uniform(10, 20)) # Nghỉ để tránh bị chặn
             
         except Exception as e:
-            print(f"Lỗi khi lấy dữ liệu {idol['name']}: {e}")
+            print(f"Lỗi tại {idol['name']}: {e}")
 
     with open('data.json', 'w', encoding='utf-8') as f:
         json.dump(final_data, f, indent=4)
