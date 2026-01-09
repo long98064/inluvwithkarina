@@ -44,31 +44,48 @@
             });
         }
 
-        function showFeed(username) {
-            const gallery = document.getElementById('gallery');
-            gallery.innerHTML = ''; 
-            const selectedIdol = globalData.profiles.find(p => p.username === username);
+       function showFeed(username) {
+    const gallery = document.getElementById('gallery');
+    gallery.innerHTML = ''; 
+    const selectedIdol = globalData.profiles.find(p => p.username === username);
+    
+    if (selectedIdol && selectedIdol.posts) {
+        selectedIdol.posts.forEach(post => {
+            const div = document.createElement('div');
             
-            if (selectedIdol) {
-                selectedIdol.posts.forEach(post => {
-                    const div = document.createElement('div');
-                    div.className = 'post-container active';
-                    div.innerHTML = `<blockquote class="instagram-media" data-instgrm-permalink="${post.url}" data-instgrm-version="14"></blockquote>`;
-                    gallery.appendChild(div);
-                });
+            // Nếu là ảnh Pinterest (link trực tiếp)
+            if (post.type === 'pinterest' || post.url.includes('pinimg.com')) {
+                div.className = 'post-container active pinterest-mode'; // Thêm class riêng
+                div.innerHTML = `
+                    <div class="pinterest-card">
+                        <img src="${post.url}" alt="Idol Photo" loading="lazy">
+                    </div>
+                `;
+            } 
+            // Nếu là bài Instagram
+            else {
+                div.className = 'post-container active';
+                div.innerHTML = `<blockquote class="instagram-media" data-instgrm-permalink="${post.url}" data-instgrm-version="14"></blockquote>`;
+            }
+            gallery.appendChild(div);
+        });
 
-                if (window.instgrm) {
-                    window.instgrm.Embeds.process();
-                } else {
-                    const script = document.createElement('script');
-                    script.async = true;
-                    script.src = "//www.instagram.com/embed.js";
-                    document.body.appendChild(script);
-                }
+        // Chỉ chạy script Instagram nếu có bài Instagram trên trang
+        if (document.querySelector('.instagram-media')) {
+            if (window.instgrm) {
+                window.instgrm.Embeds.process();
+            } else {
+                const script = document.createElement('script');
+                script.async = true;
+                script.src = "//www.instagram.com/embed.js";
+                document.body.appendChild(script);
             }
         }
+    }
+}
         init();
     </script>
 </body>
 </html>
+
 
