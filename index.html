@@ -3,17 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>aespa Gallery Archive</title>
+    <title>aespa Premium Gallery</title>
     <link rel="stylesheet" href="style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 </head>
 <body>
 
-    <h1>AESPA UPDATES</h1>
+    <h1>✨ AESPA UPDATES</h1>
 
     <div class="tabs-container" id="tabs"></div>
 
-    <div id="gallery"></div>
+    <div class="section-title">Latest Instagram Posts</div>
+    <div id="instagram-top-feed" class="insta-grid"></div>
+
+    <hr class="divider">
+
+    <div class="section-title">Pinterest Collection</div>
+    <div id="pinterest-gallery" class="pin-grid"></div>
 
     <script>
         let globalData = null;
@@ -26,7 +31,7 @@
                 if (globalData.profiles.length > 0) {
                     showFeed(globalData.profiles[0].username);
                 }
-            } catch (err) { console.error(err); }
+            } catch (err) { console.error("Lỗi tải dữ liệu:", err); }
         }
 
         function renderTabs() {
@@ -44,34 +49,38 @@
             });
         }
 
-       function showFeed(username) {
-    const gallery = document.getElementById('gallery');
-    gallery.innerHTML = ''; 
-    const selectedIdol = globalData.profiles.find(p => p.username === username);
-    
-    if (selectedIdol && selectedIdol.posts) {
-        selectedIdol.posts.forEach(post => {
-            const div = document.createElement('div');
+        function showFeed(username) {
+            const instaFeed = document.getElementById('instagram-top-feed');
+            const pinGallery = document.getElementById('pinterest-gallery');
             
-            // Nếu là ảnh Pinterest (link trực tiếp)
-            if (post.type === 'pinterest' || post.url.includes('pinimg.com')) {
-                div.className = 'post-container active pinterest-mode'; // Thêm class riêng
-                div.innerHTML = `
-                    <div class="pinterest-card">
-                        <img src="${post.url}" alt="Idol Photo" loading="lazy">
-                    </div>
-                `;
-            } 
-            // Nếu là bài Instagram
-            else {
-                div.className = 'post-container active';
-                div.innerHTML = `<blockquote class="instagram-media" data-instgrm-permalink="${post.url}" data-instgrm-version="14"></blockquote>`;
-            }
-            gallery.appendChild(div);
-        });
+            // Xóa nội dung cũ
+            instaFeed.innerHTML = '';
+            pinGallery.innerHTML = '';
 
-        // Chỉ chạy script Instagram nếu có bài Instagram trên trang
-        if (document.querySelector('.instagram-media')) {
+            const idol = globalData.profiles.find(p => p.username === username);
+            if (!idol) return;
+
+            // Phân loại bài đăng
+            const instaPosts = idol.posts.filter(p => p.type !== 'pinterest').slice(0, 3);
+            const pinPosts = idol.posts.filter(p => p.type === 'pinterest');
+
+            // Hiển thị Instagram (3 bài ngang)
+            instaPosts.forEach(post => {
+                const div = document.createElement('div');
+                div.className = 'insta-item';
+                div.innerHTML = `<blockquote class="instagram-media" data-instgrm-permalink="${post.url}" data-instgrm-version="14"></blockquote>`;
+                instaFeed.appendChild(div);
+            });
+
+            // Hiển thị Pinterest (Dạng lưới)
+            pinPosts.forEach(post => {
+                const div = document.createElement('div');
+                div.className = 'pin-item';
+                div.innerHTML = `<img src="${post.url}" alt="Pinterest Photo" loading="lazy">`;
+                pinGallery.appendChild(div);
+            });
+
+            // Kích hoạt lại Instagram Script
             if (window.instgrm) {
                 window.instgrm.Embeds.process();
             } else {
@@ -81,11 +90,7 @@
                 document.body.appendChild(script);
             }
         }
-    }
-}
         init();
     </script>
 </body>
 </html>
-
-
