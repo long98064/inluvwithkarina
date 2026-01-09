@@ -1,4 +1,3 @@
-/* --- BIẾN TOÀN CỤC --- */
 :root {
     --primary-gradient: linear-gradient(135deg, #ff0055 0%, #7000ff 100%);
     --bg-color: #0b0b0f;
@@ -8,7 +7,6 @@
     --accent: #ff0055;
 }
 
-/* --- THIẾT LẬP CHUNG --- */
 body { 
     background-color: var(--bg-color);
     color: var(--text-main);
@@ -22,7 +20,7 @@ body {
 }
 
 h1 { 
-    font-size: 2rem;
+    font-size: 2.2rem;
     font-weight: 900;
     margin: 40px 0 20px;
     text-align: center;
@@ -34,7 +32,6 @@ h1 {
     letter-spacing: 4px;
 }
 
-/* --- TABS MENU --- */
 .tabs-container {
     display: flex;
     gap: 10px;
@@ -49,7 +46,7 @@ h1 {
 }
 
 .tab-button {
-    padding: 8px 20px;
+    padding: 8px 22px;
     border: none;
     background: transparent;
     color: var(--text-dim);
@@ -73,12 +70,11 @@ h1 {
     color: var(--accent);
     text-transform: uppercase;
     letter-spacing: 2px;
-    margin: 40px 0 20px;
+    margin: 40px 0 15px;
     border-left: 3px solid var(--accent);
     padding-left: 15px;
 }
 
-/* --- PHẦN 1: INSTAGRAM (3 CỘT NGANG) --- */
 .insta-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -96,9 +92,9 @@ h1 {
     min-height: 400px;
 }
 
-/* --- PHẦN 2: PINTEREST (MASONRY CỦA PIN) --- */
+/* PINTEREST GRID */
 .pin-grid {
-    column-count: 4; /* 4 cột trên PC */
+    column-count: 4;
     column-gap: 15px;
     width: 100%;
     max-width: 1100px;
@@ -106,12 +102,12 @@ h1 {
 }
 
 .pin-item {
+    position: relative; /* Để làm gốc cho nút download */
     break-inside: avoid;
     margin-bottom: 15px;
     border-radius: 12px;
     overflow: hidden;
     background: var(--card-bg);
-    cursor: zoom-in;
     transition: transform 0.3s ease;
     box-shadow: 0 4px 15px rgba(0,0,0,0.4);
 }
@@ -120,13 +116,43 @@ h1 {
     width: 100%;
     height: auto;
     display: block;
+    cursor: zoom-in;
+}
+
+/* NÚT TẢI ẢNH */
+.download-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    opacity: 0; /* Ẩn đi mặc định */
+    transition: opacity 0.3s, background 0.3s;
+    backdrop-filter: blur(4px);
+}
+
+.pin-item:hover .download-btn {
+    opacity: 1; /* Hiện lên khi hover */
+}
+
+.download-btn:hover {
+    background: var(--accent);
 }
 
 .pin-item:hover {
     transform: scale(1.02);
 }
 
-/* --- LIGHTBOX (PHÓNG TO) --- */
+/* LIGHTBOX */
 #lightbox {
     display: none;
     position: fixed;
@@ -150,19 +176,19 @@ h1 {
     to { transform: scale(1); opacity: 1; }
 }
 
-/* --- ĐÁP ỨNG DI ĐỘNG --- */
 @media (max-width: 900px) {
     .insta-grid {
-        grid-template-columns: 1fr; /* Insta dọc 1 cột */
+        grid-template-columns: 1fr;
     }
     .pin-grid {
-        column-count: 2; /* Pinterest 2 cột trên mobile */
+        column-count: 2;
         column-gap: 10px;
     }
-    .tabs-container {
-        width: 85%;
-        overflow-x: auto;
-        justify-content: flex-start;
+    .download-btn {
+        opacity: 1; /* Luôn hiện trên mobile vì không có hover */
+        width: 30px;
+        height: 30px;
+        font-size: 1rem;
     }
 }
 
