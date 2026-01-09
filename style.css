@@ -1,4 +1,4 @@
-/* 1. KHỞI TẠO BIẾN MÀU SẮC & PHÔNG CHỮ */
+/* --- BIẾN TOÀN CỤC --- */
 :root {
     --primary-gradient: linear-gradient(135deg, #ff0055 0%, #7000ff 100%);
     --bg-color: #0b0b0f;
@@ -8,13 +8,13 @@
     --accent: #ff0055;
 }
 
-/* 2. CẤU TRÌNH CƠ BẢN */
+/* --- THIẾT LẬP CHUNG --- */
 body { 
     background-color: var(--bg-color);
     color: var(--text-main);
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Inter', -apple-system, sans-serif;
     margin: 0;
-    padding: 0 15px;
+    padding: 0 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -34,22 +34,22 @@ h1 {
     letter-spacing: 4px;
 }
 
-/* 3. TABS MENU (STICKY) */
+/* --- TABS MENU --- */
 .tabs-container {
     display: flex;
-    gap: 12px;
-    margin-bottom: 40px;
-    padding: 10px;
+    gap: 10px;
+    margin-bottom: 30px;
+    padding: 8px;
     background: rgba(255, 255, 255, 0.05);
     border-radius: 50px;
     backdrop-filter: blur(10px);
     position: sticky;
-    top: 20px;
+    top: 15px;
     z-index: 1000;
 }
 
 .tab-button {
-    padding: 10px 24px;
+    padding: 8px 20px;
     border: none;
     background: transparent;
     color: var(--text-dim);
@@ -65,11 +65,10 @@ h1 {
     box-shadow: 0 4px 15px rgba(255, 0, 85, 0.3);
 }
 
-/* 4. TIÊU ĐỀ CÁC PHẦN */
 .section-title {
     width: 100%;
     max-width: 1100px;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 700;
     color: var(--accent);
     text-transform: uppercase;
@@ -79,92 +78,99 @@ h1 {
     padding-left: 15px;
 }
 
-/* 5. PHẦN INSTAGRAM (3 BÀI NGANG) */
+/* --- PHẦN 1: INSTAGRAM (3 CỘT NGANG) --- */
 .insta-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 cột ngang trên PC */
-    gap: 20px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
     width: 100%;
     max-width: 1100px;
-    margin-bottom: 20px;
 }
 
 .insta-item {
     background: var(--card-bg);
     border-radius: 15px;
     overflow: hidden;
-    min-height: 400px;
     display: flex;
     justify-content: center;
+    min-height: 400px;
 }
 
-/* 6. PHẦN PINTEREST (LƯỚI ẢNH) */
+/* --- PHẦN 2: PINTEREST (MASONRY CỦA PIN) --- */
 .pin-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 15px;
+    column-count: 4; /* 4 cột trên PC */
+    column-gap: 15px;
     width: 100%;
     max-width: 1100px;
     margin-bottom: 50px;
 }
 
 .pin-item {
+    break-inside: avoid;
+    margin-bottom: 15px;
     border-radius: 12px;
     overflow: hidden;
     background: var(--card-bg);
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: zoom-in;
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
 }
 
 .pin-item img {
     width: 100%;
     height: auto;
     display: block;
-    object-fit: cover;
 }
 
 .pin-item:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    transform: scale(1.02);
 }
 
-/* 7. ĐƯỜNG CHIA CẮT */
+/* --- LIGHTBOX (PHÓNG TO) --- */
+#lightbox {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    justify-content: center;
+    align-items: center;
+}
+
+#lightbox img {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 10px;
+    animation: scaleUp 0.3s ease-out;
+}
+
+@keyframes scaleUp {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* --- ĐÁP ỨNG DI ĐỘNG --- */
+@media (max-width: 900px) {
+    .insta-grid {
+        grid-template-columns: 1fr; /* Insta dọc 1 cột */
+    }
+    .pin-grid {
+        column-count: 2; /* Pinterest 2 cột trên mobile */
+        column-gap: 10px;
+    }
+    .tabs-container {
+        width: 85%;
+        overflow-x: auto;
+        justify-content: flex-start;
+    }
+}
+
 .divider {
     width: 100%;
     max-width: 1100px;
     border: none;
     height: 1px;
     background: linear-gradient(to right, transparent, #333, transparent);
-    margin: 20px 0;
-}
-
-/* 8. RESPONSIVE CHO ĐIỆN THOẠI */
-@media (max-width: 900px) {
-    /* Instagram trên mobile: Dọc 1 cột */
-    .insta-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    /* Pinterest trên mobile: 2 cột */
-    .pin-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-    }
-    
-    h1 { font-size: 1.5rem; }
-    
-    .tabs-container {
-        width: 90%;
-        overflow-x: auto;
-        justify-content: flex-start;
-    }
-}
-
-/* Hiệu ứng mờ dần khi load */
-.insta-item, .pin-item {
-    animation: fadeInUp 0.6s ease backwards;
-}
-
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    margin: 30px 0;
 }
