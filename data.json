@@ -5,34 +5,28 @@
             "username": "katarinabluu",
             "posts": [
                 {
-                    "url": "https://www.instagram.com/p/DS7vq6Vkvfr/",
-                    "shortcode": "DS7vq6Vkvfr"
+                    "type": "pinterest",
+                    "url": "https://i.pinimg.com/736x/a5/52/8e/a5528e135cf5cf12ce3b6eb2d63d46e8.jpg"
                 },
                 {
-                    "url": "https://www.instagram.com/p/DS7vVcpkl2d/",
-                    "shortcode": "DS7vVcpkl2d"
+                    "type": "pinterest",
+                    "url": "https://i.pinimg.com/736x/95/90/79/959079d0e09c76ea352576af975e48ba.jpg"
                 },
                 {
-                    "url": "https://www.instagram.com/p/DSwV0TNEpx9/",
-                    "shortcode": "DSwV0TNEpx9"
-                }
-            ]
-        },
-        {
-            "name": "Winter",
-            "username": "imwinter",
-            "posts": [
-                {
-                    "url": "https://www.instagram.com/p/DTACH-kE6-w/",
-                    "shortcode": "DTACH-kE6-w"
+                    "type": "pinterest",
+                    "url": "https://i.pinimg.com/736x/bc/3d/fb/bc3dfb9c917ec7d31c2f398f59fb0eca.jpg"
                 },
                 {
-                    "url": "https://www.instagram.com/p/DS8mhk_Exjw/",
-                    "shortcode": "DS8mhk_Exjw"
+                    "type": "pinterest",
+                    "url": "https://i.pinimg.com/736x/85/80/eb/8580eb75a0c8eac30c20832efcfe6c9d.jpg"
                 },
                 {
-                    "url": "https://www.instagram.com/p/DS7wVgik9VC/",
-                    "shortcode": "DS7wVgik9VC"
+                    "type": "pinterest",
+                    "url": "https://i.pinimg.com/736x/5b/34/2a/5b342a9e5ac364f23fd359fc069f68cd.jpg"
+                },
+                {
+                    "type": "pinterest",
+                    "url": "https://i.pinimg.com/736x/82/64/99/8264990e1e11749a8112e6b8ffc98212.jpg"
                 }
             ]
         }
