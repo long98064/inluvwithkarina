@@ -5,6 +5,18 @@
             "username": "katarinabluu",
             "posts": [
                 {
+                    "type": "instagram",
+                    "url": "https://www.instagram.com/p/DS7vq6Vkvfr/"
+                },
+                {
+                    "type": "instagram",
+                    "url": "https://www.instagram.com/p/DS7vVcpkl2d/"
+                },
+                {
+                    "type": "instagram",
+                    "url": "https://www.instagram.com/p/DSwV0TNEpx9/"
+                },
+                {
                     "type": "pinterest",
                     "url": "https://i.pinimg.com/736x/a5/52/8e/a5528e135cf5cf12ce3b6eb2d63d46e8.jpg"
                 },
@@ -27,6 +39,24 @@
                 {
                     "type": "pinterest",
                     "url": "https://i.pinimg.com/736x/82/64/99/8264990e1e11749a8112e6b8ffc98212.jpg"
+                }
+            ]
+        },
+        {
+            "name": "Winter",
+            "username": "imwinter",
+            "posts": [
+                {
+                    "type": "instagram",
+                    "url": "https://www.instagram.com/p/DTACH-kE6-w/"
+                },
+                {
+                    "type": "instagram",
+                    "url": "https://www.instagram.com/p/DS8mhk_Exjw/"
+                },
+                {
+                    "type": "instagram",
+                    "url": "https://www.instagram.com/p/DS7wVgik9VC/"
                 }
             ]
         }
