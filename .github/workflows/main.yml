@@ -1,1 +1,35 @@
+name: Update Karina Instagram Feed
 
+on:
+  schedule:
+    # Chạy vào 00:00 UTC (tức 7:00 sáng giờ Việt Nam) mỗi ngày
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Giúp bạn có nút "Run workflow" để chạy thử ngay lập tức
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install instaloader
+
+      - name: Run fetch script
+        run: python fetch_karina.py
+
+      - name: Commit and Push if changed
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add data.json
+          git commit -m "Cập nhật ảnh mới nhất của Karina" || echo "Không có thay đổi mới"
+          git push
