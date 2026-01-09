@@ -1,28 +1,46 @@
 import instaloader
 import json
-import os
+import time
+import random
 
-def get_karina_posts():
+def fetch_data():
     L = instaloader.Instaloader()
-    # Lấy profile công khai của Karina
-    profile = instaloader.Profile.from_username(L.context, "katarinabluu")
+    # Danh sách các idol bạn muốn theo dõi
+    idols = [
+        {"name": "Karina", "username": "katarinabluu"},
+        {"name": "Winter", "username": "imwinter"}
+    ]
     
-    posts_data = []
-    
-    # Lấy 3 bài viết mới nhất
-    for count, post in enumerate(profile.get_posts()):
-        if count >= 3: break 
-        
-        # Tạo mã nhúng đơn giản (chỉ cần link bài viết, script của Insta sẽ lo phần còn lại)
-        posts_data.append({
-            "url": f"https://www.instagram.com/p/{post.shortcode}/",
-            "shortcode": post.shortcode,
-            "timestamp": post.date_utc.isoformat()
-        })
-    
-    # Lưu vào file JSON
+    final_data = {"profiles": []}
+
+    for idol in idols:
+        print(f"Đang lấy dữ liệu của {idol['name']}...")
+        try:
+            profile = instaloader.Profile.from_username(L.context, idol['username'])
+            posts_data = []
+            
+            for count, post in enumerate(profile.get_posts()):
+                if count >= 3: break 
+                posts_data.append({
+                    "url": f"https://www.instagram.com/p/{post.shortcode}/",
+                    "shortcode": post.shortcode,
+                    "timestamp": post.date_utc.isoformat()
+                })
+            
+            final_data["profiles"].append({
+                "name": idol['name'],
+                "username": idol['username'],
+                "posts": posts_data
+            })
+            
+            # Nghỉ ngơi một chút để tránh bị Instagram chặn (rất quan trọng khi quét nhiều người)
+            time.sleep(random.uniform(5, 10))
+            
+        except Exception as e:
+            print(f"Lỗi khi lấy dữ liệu {idol['name']}: {e}")
+
     with open('data.json', 'w', encoding='utf-8') as f:
-        json.dump({"profiles": [{"username": "katarinabluu", "posts": posts_data}]}, f, indent=4)
+        json.dump(final_data, f, indent=4)
 
 if __name__ == "__main__":
-    get_karina_posts()
+    fetch_data()
