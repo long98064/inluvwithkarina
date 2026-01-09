@@ -7,88 +7,91 @@
 }
 
 body { 
-    font-family: 'Inter', sans-serif; 
+    font-family: 'Inter', -apple-system, sans-serif; 
     background: var(--bg-color);
     color: var(--text-color);
     margin: 0;
-    padding: 20px;
+    padding: 10px; /* Giảm padding trên điện thoại */
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow-x: hidden; /* Ngăn tràn ngang */
 }
 
 h1 { 
-    font-size: 2.5rem;
-    font-weight: 800;
-    
-    /* 1. Thiết lập màu nền Gradient */
+    font-size: 1.5rem; /* Nhỏ lại một chút để vừa mobile */
+    margin: 20px 0; 
+    text-align: center;
     background: linear-gradient(to right, var(--primary-color), var(--accent-color));
-
-    /* 2. Cắt nền theo hình dạng của chữ (Standard & Vendor Prefixes) */
-    background-clip: text;            /* Thuộc tính chuẩn tương lai */
-    -webkit-background-clip: text;    /* Hỗ trợ Chrome, Safari, Edge */
-    -moz-background-clip: text;       /* Hỗ trợ các phiên bản cũ của Firefox */
-
-    /* 3. Làm cho màu chữ gốc trở nên trong suốt để lộ nền phía sau */
-    color: transparent;               
-    -webkit-text-fill-color: transparent; 
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
 }
-/* Menu Tabs */
+
+/* Tabs: Tự động xuống dòng hoặc cuộn ngang trên điện thoại */
 .tabs-container {
     display: flex;
-    gap: 10px;
-    margin-bottom: 30px;
-    background: var(--card-bg);
-    padding: 8px;
-    border-radius: 50px;
+    gap: 8px;
+    margin-bottom: 20px;
+    padding: 5px;
+    max-width: 100%;
+    overflow-x: auto; /* Cho phép vuốt ngang để chọn tên trên mobile */
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
 }
 
 .tab-button {
-    padding: 10px 25px;
+    padding: 8px 18px;
+    font-size: 0.9rem;
     border: none;
-    background: transparent;
+    background: var(--card-bg);
     color: #888;
-    border-radius: 40px;
+    border-radius: 20px;
     cursor: pointer;
-    font-weight: 600;
-    transition: all 0.3s ease;
 }
 
 .tab-button.active {
     background: var(--primary-color);
     color: white;
-    box-shadow: 0 4px 15px rgba(255, 0, 85, 0.4);
 }
 
-/* Bố cục Lưới (Grid) - Điểm nhấn quan trọng nhất */
+/* Gallery: Quan trọng nhất để xem trên điện thoại */
 #gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* Tự động chia cột */
-    gap: 20px;
+    grid-template-columns: 1fr; /* Mặc định 1 cột cho mobile */
+    gap: 15px;
     width: 100%;
-    max-width: 1200px;
+    max-width: 540px; /* Giới hạn để không quá to trên máy tính */
 }
 
+/* Xử lý khung Instagram: Ép nó tự co giãn (Crop theo chiều ngang) */
 .post-container {
+    width: 100%;
     background: var(--card-bg);
-    padding: 5px;
-    border-radius: 16px;
+    border-radius: 12px;
     overflow: hidden;
     display: none;
     justify-content: center;
-    transition: transform 0.3s ease;
 }
 
 .post-container.active {
     display: flex;
 }
 
-.post-container:hover {
-    transform: translateY(-10px);
+/* Ép khung Instagram Embed phải rộng 100% màn hình điện thoại */
+.post-container iframe, 
+.post-container .instagram-media {
+    width: 100% !important;
+    min-width: 100% !important;
+    margin: 0 !important;
 }
 
-/* Thanh cuộn mượt */
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: var(--bg-color); }
-::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: var(--primary-color); }
+/* Nếu màn hình rộng hơn 800px (Máy tính) thì chia 2 cột */
+@media (min-width: 800px) {
+    #gallery {
+        grid-template-columns: 1fr 1fr;
+        max-width: 1100px;
+    }
+    h1 { font-size: 2.5rem; }
+}
