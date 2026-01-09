@@ -95,3 +95,34 @@ h1 {
     }
     h1 { font-size: 2.5rem; }
 }
+
+/* Container chứa ảnh Pinterest */
+.pinterest-card {
+    position: relative;
+    width: 100%;
+    margin-bottom: 10px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.pinterest-card img {
+    width: 100%;
+    height: auto; /* Để ảnh giữ nguyên tỷ lệ gốc */
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.pinterest-card:hover img {
+    transform: scale(1.03);
+}
+
+/* Hiệu ứng mờ dần khi ảnh tải xong */
+.pinterest-card img {
+    animation: fadeIn 1s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
