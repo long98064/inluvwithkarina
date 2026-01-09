@@ -2,23 +2,32 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>aespa Premium Gallery</title>
+    <!-- Kết nối file CSS riêng -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <h1>✨ AESPA UPDATES</h1>
+    <h1>AESPA GALLERY</h1>
 
+    <!-- Menu chọn Idol -->
     <div class="tabs-container" id="tabs"></div>
 
-    <div class="section-title">Latest Instagram Posts</div>
+    <!-- Instagram Feed -->
+    <div class="section-title">Cập nhật mới (Instagram)</div>
     <div id="instagram-top-feed" class="insta-grid"></div>
 
     <hr class="divider">
 
-    <div class="section-title">Pinterest Collection</div>
+    <!-- Pinterest Gallery -->
+    <div class="section-title">Bộ sưu tập ảnh (Pinterest)</div>
     <div id="pinterest-gallery" class="pin-grid"></div>
+
+    <!-- Lightbox phóng to ảnh -->
+    <div id="lightbox" onclick="this.style.display='none'">
+        <img id="lightbox-img" src="" alt="Ảnh phóng to">
+    </div>
 
     <script>
         let globalData = null;
@@ -26,16 +35,22 @@
         async function init() {
             try {
                 const response = await fetch('data.json');
+                if (!response.ok) throw new Error("Không tìm thấy data.json");
                 globalData = await response.json();
+                
                 renderTabs();
-                if (globalData.profiles.length > 0) {
+                
+                if (globalData.profiles && globalData.profiles.length > 0) {
                     showFeed(globalData.profiles[0].username);
                 }
-            } catch (err) { console.error("Lỗi tải dữ liệu:", err); }
+            } catch (err) {
+                console.error("Lỗi:", err);
+            }
         }
 
         function renderTabs() {
             const tabsContainer = document.getElementById('tabs');
+            tabsContainer.innerHTML = '';
             globalData.profiles.forEach((idol, index) => {
                 const btn = document.createElement('button');
                 btn.className = `tab-button ${index === 0 ? 'active' : ''}`;
@@ -53,18 +68,16 @@
             const instaFeed = document.getElementById('instagram-top-feed');
             const pinGallery = document.getElementById('pinterest-gallery');
             
-            // Xóa nội dung cũ
             instaFeed.innerHTML = '';
             pinGallery.innerHTML = '';
 
             const idol = globalData.profiles.find(p => p.username === username);
             if (!idol) return;
 
-            // Phân loại bài đăng
             const instaPosts = idol.posts.filter(p => p.type !== 'pinterest').slice(0, 3);
             const pinPosts = idol.posts.filter(p => p.type === 'pinterest');
 
-            // Hiển thị Instagram (3 bài ngang)
+            // Hiển thị Instagram
             instaPosts.forEach(post => {
                 const div = document.createElement('div');
                 div.className = 'insta-item';
@@ -72,15 +85,22 @@
                 instaFeed.appendChild(div);
             });
 
-            // Hiển thị Pinterest (Dạng lưới)
+            // Hiển thị Pinterest
             pinPosts.forEach(post => {
                 const div = document.createElement('div');
                 div.className = 'pin-item';
                 div.innerHTML = `<img src="${post.url}" alt="Pinterest Photo" loading="lazy">`;
+                
+                div.onclick = () => {
+                    const lightbox = document.getElementById('lightbox');
+                    const lightboxImg = document.getElementById('lightbox-img');
+                    lightboxImg.src = post.url;
+                    lightbox.style.display = 'flex';
+                };
+                
                 pinGallery.appendChild(div);
             });
 
-            // Kích hoạt lại Instagram Script
             if (window.instgrm) {
                 window.instgrm.Embeds.process();
             } else {
@@ -90,7 +110,8 @@
                 document.body.appendChild(script);
             }
         }
-        init();
+
+        window.onload = init;
     </script>
 </body>
 </html>
