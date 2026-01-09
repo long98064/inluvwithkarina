@@ -1,22 +1,38 @@
 {
     "profiles": [
         {
+            "name": "Karina",
             "username": "katarinabluu",
             "posts": [
                 {
                     "url": "https://www.instagram.com/p/DS7vq6Vkvfr/",
-                    "shortcode": "DS7vq6Vkvfr",
-                    "timestamp": "2025-12-31T15:51:32"
+                    "shortcode": "DS7vq6Vkvfr"
                 },
                 {
                     "url": "https://www.instagram.com/p/DS7vVcpkl2d/",
-                    "shortcode": "DS7vVcpkl2d",
-                    "timestamp": "2025-12-31T15:48:36"
+                    "shortcode": "DS7vVcpkl2d"
                 },
                 {
                     "url": "https://www.instagram.com/p/DSwV0TNEpx9/",
-                    "shortcode": "DSwV0TNEpx9",
-                    "timestamp": "2025-12-27T05:33:59"
+                    "shortcode": "DSwV0TNEpx9"
+                }
+            ]
+        },
+        {
+            "name": "Winter",
+            "username": "imwinter",
+            "posts": [
+                {
+                    "url": "https://www.instagram.com/p/DTACH-kE6-w/",
+                    "shortcode": "DTACH-kE6-w"
+                },
+                {
+                    "url": "https://www.instagram.com/p/DS8mhk_Exjw/",
+                    "shortcode": "DS8mhk_Exjw"
+                },
+                {
+                    "url": "https://www.instagram.com/p/DS7wVgik9VC/",
+                    "shortcode": "DS7wVgik9VC"
                 }
             ]
         }
