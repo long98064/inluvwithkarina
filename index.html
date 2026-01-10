@@ -8,6 +8,21 @@
 </head>
 <body>
 
+    <!-- TRÌNH PHÁT NHẠC MINI -->
+    <div class="music-player" id="music-player">
+        <div class="music-info">
+            <div class="music-disk" id="music-disk"></div>
+            <div class="music-text">
+                <span class="song-title" id="song-title">Whiplash</span>
+                <span class="artist-name">aespa</span>
+            </div>
+        </div>
+        <button class="play-btn" id="play-btn">▶</button>
+        <audio id="bg-music" loop>
+            <source id="music-source" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+
     <h1>AESPA GALLERY</h1>
 
     <div class="tabs-container" id="tabs"></div>
@@ -27,19 +42,75 @@
     <script>
         let globalData = null;
 
+        // Định nghĩa bảng màu và bài hát cho từng Idol
+        const idolThemes = {
+            "Karina": {
+                "gradient": "linear-gradient(135deg, #ff0055 0%, #7000ff 100%)", // Màu nguyên bản bạn thích
+                "accent": "#ff0055",
+                "glow": "rgba(255, 0, 85, 0.4)",
+                "songTitle": "Whiplash",
+                "songUrl": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" // Thay bằng link bài Whiplash
+            },
+            "Winter": {
+                "gradient": "linear-gradient(135deg, #00d4ff 0%, #ffffff 100%)",
+                "accent": "#00d4ff",
+                "glow": "rgba(0, 212, 255, 0.4)",
+                "songTitle": "Supernova",
+                "songUrl": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" // Thay bằng link bài Supernova
+            }
+        };
+
+        const music = document.getElementById('bg-music');
+        const musicSource = document.getElementById('music-source');
+        const playBtn = document.getElementById('play-btn');
+        const songTitleDisplay = document.getElementById('song-title');
+        const disk = document.getElementById('music-disk');
+        let isPlaying = false;
+
+        playBtn.onclick = () => {
+            if (isPlaying) {
+                music.pause();
+                playBtn.innerText = '▶';
+                disk.classList.remove('rotating');
+            } else {
+                music.play();
+                playBtn.innerText = '⏸';
+                disk.classList.add('rotating');
+            }
+            isPlaying = !isPlaying;
+        };
+
         async function init() {
             try {
                 const response = await fetch('data.json');
                 if (!response.ok) throw new Error("Không tìm thấy data.json");
                 globalData = await response.json();
-                
                 renderTabs();
-                
                 if (globalData.profiles && globalData.profiles.length > 0) {
                     showFeed(globalData.profiles[0].username);
                 }
-            } catch (err) {
-                console.error("Lỗi:", err);
+            } catch (err) { console.error(err); }
+        }
+
+        function applyThemeAndMusic(idolName) {
+            const theme = idolThemes[idolName] || idolThemes["Karina"];
+            const root = document.documentElement;
+            
+            // 1. Đổi màu giao diện
+            root.style.setProperty('--primary-gradient', theme.gradient);
+            root.style.setProperty('--accent', theme.accent);
+            root.style.setProperty('--glow-color', theme.glow);
+
+            // 2. Đổi bài hát
+            if (songTitleDisplay.innerText !== theme.songTitle) {
+                songTitleDisplay.innerText = theme.songTitle;
+                musicSource.src = theme.songUrl;
+                music.load(); // Tải lại file nhạc mới
+                
+                // Nếu đang phát thì tiếp tục phát bài mới luôn
+                if (isPlaying) {
+                    music.play();
+                }
             }
         }
 
@@ -59,34 +130,27 @@
             });
         }
 
-        // Hàm xử lý tải ảnh
         async function forceDownload(url, filename) {
             try {
                 const response = await fetch(url);
                 const blob = await response.blob();
-                const blobUrl = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
-                a.href = blobUrl;
+                a.href = window.URL.createObjectURL(blob);
                 a.download = filename;
-                document.body.appendChild(a);
                 a.click();
-                document.body.removeChild(a);
-                window.URL.revokeObjectURL(blobUrl);
-            } catch (error) {
-                // Nếu bị chặn bởi CORS (thường gặp với Pinterest), mở ảnh trong tab mới để user lưu thủ công
-                window.open(url, '_blank');
-            }
+            } catch { window.open(url, '_blank'); }
         }
 
         function showFeed(username) {
-            const instaFeed = document.getElementById('instagram-top-feed');
-            const pinGallery = document.getElementById('pinterest-gallery');
-            
-            instaFeed.innerHTML = '';
-            pinGallery.innerHTML = '';
-
             const idol = globalData.profiles.find(p => p.username === username);
             if (!idol) return;
+
+            applyThemeAndMusic(idol.name);
+
+            const instaFeed = document.getElementById('instagram-top-feed');
+            const pinGallery = document.getElementById('pinterest-gallery');
+            instaFeed.innerHTML = ''; 
+            pinGallery.innerHTML = '';
 
             const instaPosts = idol.posts.filter(p => p.type !== 'pinterest').slice(0, 3);
             const pinPosts = idol.posts.filter(p => p.type === 'pinterest');
@@ -101,43 +165,24 @@
             pinPosts.forEach((post, index) => {
                 const div = document.createElement('div');
                 div.className = 'pin-item';
-                
-                // Tạo ảnh
-                const img = document.createElement('img');
-                img.src = post.url;
-                img.loading = "lazy";
-                img.onclick = () => {
-                    const lightbox = document.getElementById('lightbox');
-                    const lightboxImg = document.getElementById('lightbox-img');
-                    lightboxImg.src = post.url;
-                    lightbox.style.display = 'flex';
+                div.innerHTML = `<img src="${post.url}" loading="lazy"><button class="download-btn">⬇</button>`;
+                div.querySelector('img').onclick = () => {
+                    document.getElementById('lightbox-img').src = post.url;
+                    document.getElementById('lightbox').style.display = 'flex';
                 };
-
-                // Tạo nút tải ảnh
-                const downloadBtn = document.createElement('button');
-                downloadBtn.className = 'download-btn';
-                downloadBtn.innerHTML = '⬇'; // Biểu tượng tải xuống
-                downloadBtn.title = "Tải ảnh về máy";
-                downloadBtn.onclick = (e) => {
-                    e.stopPropagation(); // Ngăn sự kiện phóng to ảnh
-                    forceDownload(post.url, `${idol.name}_aespa_${index}.jpg`);
+                div.querySelector('.download-btn').onclick = (e) => {
+                    e.stopPropagation();
+                    forceDownload(post.url, `${idol.name}_${index}.jpg`);
                 };
-
-                div.appendChild(img);
-                div.appendChild(downloadBtn);
                 pinGallery.appendChild(div);
             });
 
-            if (window.instgrm) {
-                window.instgrm.Embeds.process();
-            } else {
-                const script = document.createElement('script');
-                script.async = true;
-                script.src = "//www.instagram.com/embed.js";
-                document.body.appendChild(script);
+            if (window.instgrm) window.instgrm.Embeds.process();
+            else {
+                const s = document.createElement('script'); s.async = true; s.src = "//www.instagram.com/embed.js";
+                document.body.appendChild(s);
             }
         }
-
         window.onload = init;
     </script>
 </body>
