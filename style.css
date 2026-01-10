@@ -3,200 +3,117 @@
     --bg-color: #0b0b0f;
     --card-bg: #16161d;
     --text-main: #ffffff;
-    --text-dim: #a0a0a0;
     --accent: #ff0055;
+    --glow-color: rgba(255, 0, 85, 0.4);
+    --transition-speed: 0.6s;
 }
 
 body { 
     background-color: var(--bg-color);
     color: var(--text-main);
     font-family: 'Inter', -apple-system, sans-serif;
-    margin: 0;
-    padding: 0 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow-x: hidden;
+    margin: 0; padding: 0 10px;
+    display: flex; flex-direction: column; align-items: center;
+    transition: background-color var(--transition-speed);
 }
 
 h1 { 
-    font-size: 2.2rem;
-    font-weight: 900;
-    margin: 40px 0 20px;
-    text-align: center;
-    background: var(--primary-gradient);
+    font-size: 2.2rem; 
+    margin: 40px 0; 
+    background: var(--primary-gradient); 
     -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: 4px;
+    background-clip: text; 
+    color: transparent; 
+    transition: background var(--transition-speed);
 }
 
-.tabs-container {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 30px;
-    padding: 8px;
+/* MUSIC PLAYER */
+.music-player {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
     background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    padding: 10px 20px;
     border-radius: 50px;
-    backdrop-filter: blur(10px);
-    position: sticky;
-    top: 15px;
-    z-index: 1000;
-}
-
-.tab-button {
-    padding: 8px 22px;
-    border: none;
-    background: transparent;
-    color: var(--text-dim);
-    font-weight: 600;
-    border-radius: 40px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.tab-button.active {
-    background: var(--primary-gradient);
-    color: white;
-    box-shadow: 0 4px 15px rgba(255, 0, 85, 0.3);
-}
-
-.section-title {
-    width: 100%;
-    max-width: 1100px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--accent);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin: 40px 0 15px;
-    border-left: 3px solid var(--accent);
-    padding-left: 15px;
-}
-
-.insta-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-    width: 100%;
-    max-width: 1100px;
-}
-
-.insta-item {
-    background: var(--card-bg);
-    border-radius: 15px;
-    overflow: hidden;
     display: flex;
-    justify-content: center;
-    min-height: 400px;
+    align-items: center;
+    gap: 15px;
+    z-index: 5000;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
 }
 
-/* PINTEREST GRID */
-.pin-grid {
-    column-count: 4;
-    column-gap: 15px;
-    width: 100%;
-    max-width: 1100px;
-    margin-bottom: 50px;
-}
-
-.pin-item {
-    position: relative; /* Để làm gốc cho nút download */
-    break-inside: avoid;
-    margin-bottom: 15px;
-    border-radius: 12px;
-    overflow: hidden;
-    background: var(--card-bg);
-    transition: transform 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-}
-
-.pin-item img {
-    width: 100%;
-    height: auto;
-    display: block;
-    cursor: zoom-in;
-}
-
-/* NÚT TẢI ẢNH */
-.download-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+.music-disk {
     width: 35px;
     height: 35px;
+    background: var(--primary-gradient);
     border-radius: 50%;
-    background: rgba(0, 0, 0, 0.6);
-    color: white;
+    border: 2px solid white;
+    transition: background var(--transition-speed);
+}
+
+.play-btn {
+    background: white;
     border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    opacity: 0; /* Ẩn đi mặc định */
-    transition: opacity 0.3s, background 0.3s;
-    backdrop-filter: blur(4px);
+    font-size: 0.8rem;
+    display: flex; align-items: center; justify-content: center;
 }
 
-.pin-item:hover .download-btn {
-    opacity: 1; /* Hiện lên khi hover */
+/* TABS */
+.tabs-container { 
+    display: flex; gap: 10px; position: sticky; top: 15px; z-index: 1000; 
+    background: rgba(255,255,255,0.05); padding: 8px; border-radius: 50px; backdrop-filter: blur(10px); 
 }
 
-.download-btn:hover {
-    background: var(--accent);
+.tab-button { 
+    padding: 8px 20px; border: none; background: transparent; color: #a0a0a0; 
+    cursor: pointer; border-radius: 40px; transition: 0.3s;
 }
 
-.pin-item:hover {
-    transform: scale(1.02);
+.tab-button.active { 
+    background: var(--primary-gradient); 
+    color: white; 
+    box-shadow: 0 4px 15px var(--glow-color);
 }
 
-/* LIGHTBOX */
-#lightbox {
-    display: none;
-    position: fixed;
-    z-index: 9999;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.95);
-    justify-content: center;
-    align-items: center;
+.section-title { 
+    width: 100%; max-width: 1100px; color: var(--accent); 
+    font-size: 0.85rem; text-transform: uppercase; margin: 40px 0 15px; 
+    border-left: 3px solid var(--accent); padding-left: 15px; 
+    transition: color var(--transition-speed), border-left var(--transition-speed);
 }
 
-#lightbox img {
-    max-width: 90%;
-    max-height: 90%;
-    border-radius: 10px;
-    animation: scaleUp 0.3s ease-out;
-}
+/* GRIDS */
+.insta-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 100%; max-width: 1100px; }
+.insta-item { background: var(--card-bg); border-radius: 15px; min-height: 400px; display: flex; justify-content: center; overflow: hidden; }
 
-@keyframes scaleUp {
-    from { transform: scale(0.8); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
+.pin-grid { column-count: 4; column-gap: 15px; width: 100%; max-width: 1100px; }
+.pin-item { position: relative; break-inside: avoid; margin-bottom: 15px; border-radius: 12px; overflow: hidden; transition: 0.3s; }
+.pin-item img { width: 100%; cursor: zoom-in; }
+
+.download-btn { 
+    position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.5); 
+    color: white; border: none; border-radius: 50%; width: 30px; height: 30px; 
+    cursor: pointer; opacity: 0; transition: 0.3s; 
 }
+.pin-item:hover .download-btn { opacity: 1; }
+.download-btn:hover { background: var(--accent); }
+
+.divider { width: 100%; max-width: 1100px; height: 1px; background: #333; margin: 30px 0; }
+
+#lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 6000; justify-content: center; align-items: center; }
+#lightbox img { max-width: 90%; max-height: 90%; border-radius: 10px; }
+
+.rotating { animation: rotate 3s linear infinite; }
+@keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
 @media (max-width: 900px) {
-    .insta-grid {
-        grid-template-columns: 1fr;
-    }
-    .pin-grid {
-        column-count: 2;
-        column-gap: 10px;
-    }
-    .download-btn {
-        opacity: 1; /* Luôn hiện trên mobile vì không có hover */
-        width: 30px;
-        height: 30px;
-        font-size: 1rem;
-    }
-}
-
-.divider {
-    width: 100%;
-    max-width: 1100px;
-    border: none;
-    height: 1px;
-    background: linear-gradient(to right, transparent, #333, transparent);
-    margin: 30px 0;
+    .insta-grid { grid-template-columns: 1fr; }
+    .pin-grid { column-count: 2; }
+    .music-player { left: 10px; bottom: 10px; padding: 5px 15px; }
 }
